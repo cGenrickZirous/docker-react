@@ -1,0 +1,9 @@
+sudo: required #we need super user level permissions to build
+services:
+  - docker #install a copy of docker into container
+
+before_install: #installed before tests are ran
+  - docker build -t cgenrick/docker-react -f Dockerfile.dev . 
+
+script:
+  - docker run cgenrick/docker-react npm run test -- --coverage
