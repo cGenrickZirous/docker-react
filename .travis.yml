@@ -7,3 +7,20 @@ before_install: #installed before tests are ran
 
 script:
   - docker run cgenrick/docker-react npm run test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk #This could also be AWS, EB, etc
+  region: us-east-2 #This is the region created in
+  app: "docker-react"
+  env: "DockerReact-env"
+  #Takes all files in git hub, zip them, copy them to s3 bucket, once
+  #it copies all files over, it lets beanstalk know, need to know name of bucket we
+  #are putting files in
+  bucket_name: "elasticbeanstalk-us-east-2-204430895477"
+  #First time it is just the app name 
+  bucket_path: "docker"
+  on: #any time we push code to branch master, it is time to deploy
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY #get the key from within travis-ci
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
